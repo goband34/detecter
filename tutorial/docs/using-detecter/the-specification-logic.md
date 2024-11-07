@@ -161,17 +161,17 @@ Let us try to specify a safety requirement on the behaviour of our [calculator p
 The sHML formula with symbolic action `#!shml Srv:Clt ! {bye, Tot} when Tot < 0` describes the property requiring that "the program state does *not* exhibit a send event whose payload consists of `#!erlang {bye, Tot}` with a negative total:
 
 ```shml
-and([Srv:Clt ! {bye, Tot} when Tot < 0])ff
+and([Srv:Clt ! {bye, Tot} when Tot < 0]ff)
 ```
 
 Recall that the universal modality states that, for any program event satisfying the symbolic action `#!shml P when C` in `#!shml [P when C]φ`, the ensuing program behaviour must then satisfy the continuation formula `#!shml φ`.
 However, *no* program state can satisfy the continuation `#!shml ff`! 
-This means that the formula `#!shml and([Srv:Clt ! {bye, Tot} when Tot < 0])ff` can only be satisfied when  our calculator program does not exhibit the event described by the symbolic action `#!erlang Srv:Clt ! {bye, Tot} when Tot < 0`.
+This means that the formula `#!shml and([Srv:Clt ! {bye, Tot} when Tot < 0]ff)` can only be satisfied when  our calculator program does not exhibit the event described by the symbolic action `#!erlang Srv:Clt ! {bye, Tot} when Tot < 0`.
 
 Suppose our server with PID `#!erlang <0.10.0>` exhibits the `send` event `#!erlang <0.10.0>:<0.16.0> ! {bye, -1}` in response to a request issued by a client with PID `#!erlang <0.16.0>`.
 It matches pattern `#!shml Srv:Clt ! {bye, Tot}`, instantiating the variables `#!erlang Srv = <0.10.0>`, `#!erlang Clt = <0.16.0>`, and `#!erlang Tot = -1`.
 The constraint `#!erlang when Tot < 0` is also satisfied by `#!erlang Tot`, leading to a violation, *i.e.*, `#!shml ff`.
-For a different `send` event `#!erlang <0.10.0>:<0.16.0> ! {bye, 1}`, the symbolic action in the modality `#!shml [Srv:Clt ! {bye, Tot} when Tot < 0]` is not satisfied, and consequently, `#!shml and([Srv:Clt ! {bye, Tot} when Tot < 0])ff` is not violated.
+For a different `send` event `#!erlang <0.10.0>:<0.16.0> ! {bye, 1}`, the symbolic action in the modality `#!shml [Srv:Clt ! {bye, Tot} when Tot < 0]` is not satisfied, and consequently, `#!shml and([Srv:Clt ! {bye, Tot} when Tot < 0]ff)` is not violated.
 Analogously, the `exit` event `#!erlang <0.10.0> ** killed` does not lead to a violation of the formula since the pattern `#!shml Srv:Clt ! {bye, Tot}` fails to match the event shape.
 
 !!! note "Cheat sheet"
